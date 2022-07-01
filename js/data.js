@@ -113,7 +113,7 @@ var app = new Vue({
       user2:{
         gender: '',
         name: {
-          title: '',
+          
           first: '',
           last: ''
         },
@@ -153,6 +153,14 @@ var app = new Vue({
       },
 
       img: '',
+
+      from: [],
+      to: [],
+      money1: 0,
+      money2: 0,
+
+      opt1: '',
+      opt2: '',
      
      
   
@@ -220,6 +228,53 @@ var app = new Vue({
         
       },
 
+      async loadMoney(){
+        
+        const myHeaders = new Headers();
+        myHeaders.append("apikey", "2Iu1Pp4BHkhv7FSUlJ1usodJcshUxG2a");
+
+        const requestOptions = {
+          method: 'GET',
+          redirect: 'follow',
+          headers: myHeaders,
+        } ;
+
+        await fetch("https://api.apilayer.com/exchangerates_data/symbols", requestOptions)
+          .then(response => response.json())
+          .then((result) => money= result)
+          .catch(error => console.log('error', error));
+
+        const x =  money["symbols"];
+        console.log(x);
+        // this.from = Object.keys(symbols).map(function (key) {return [String(key), symbols[key]];});
+
+        this.from = Object.entries(x);
+        
+    },
+
+    convert(){
+     
+var myHeaders = new Headers();
+myHeaders.append("apikey", "2Iu1Pp4BHkhv7FSUlJ1usodJcshUxG2a");
+
+var requestOptions = {
+  method: 'GET',
+  redirect: 'follow',
+  headers: myHeaders
+};
+
+fetch(`https://api.apilayer.com/exchangerates_data/convert?to=${this.opt2}&from=${this.opt1}&amount=${this.money1}`, requestOptions)
+  .then(response => response.json())
+  .then(result => this.money2 = result.result)
+  .catch(error => console.log('error', error));
+
+  console.log(this.money2);
+
+  
+
+
+    },
+
       loadAdmin(){
 
         this.option = 3;
@@ -281,15 +336,16 @@ var app = new Vue({
         // btn.classList.remove('disabled')
   
       },
+
       updateUser(){
       
 
       
         this.users.forEach(u => {
-          if(u.id.name == this.user2.id.name)  
+          if(u.id.name == this.user2.id)  
           {
             
-
+            console.log('hdjjfhf');
             u.gender = this.user2.gender ;
             u.name.title= this.user2.name.title ;
             u.name.first = this.user2.name.first ;
@@ -304,6 +360,8 @@ var app = new Vue({
             u.phone = this.user2.phone ;
             u.cell = this.user2.cell ;
             u.nat = this.user2.nat;
+
+            u.fullName =  this.user2.name.first + ' ' +  this.user2.name.last;
             
             
           }
@@ -446,6 +504,7 @@ var app = new Vue({
       updateLocalStorage(){
         localStorage.setItem('users', JSON.stringify(this.users));
         localStorage.setItem('pets', JSON.stringify(this.newPets));
+        localStorage.setItem('money', JSON.stringify(this.from))
     },
   
   
@@ -478,15 +537,10 @@ var app = new Vue({
             this.user = element;
             console.log("hola");
           }
+        
+
           
-        });
-
-      
-
-        
-
-        
-
+        });    
     }
     else{
 
@@ -501,6 +555,13 @@ var app = new Vue({
         window.location.href = "../Login.html";
     }
 
+    if(localStorage.getItem('money') != null){
+      this.from = JSON.parse(localStorage.getItem('money'))
+  }
+  else{
+    this.loadMoney();
+  }
+
 
     
 
@@ -512,10 +573,10 @@ var app = new Vue({
 
   mounted() {
 
-    if(this.user != null){
-      let btn = document.getElementById("log");
-        btn.click();
-    }
+    // if(this.user != null){
+    //   let btn = document.getElementById("log");
+    //     btn.click();
+    // }
 
     if(localStorage.getItem('users') != null){
       this.users = JSON.parse(localStorage.getItem('users'))

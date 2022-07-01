@@ -26,7 +26,7 @@
     <div id="app" >
  
         <!-- Opcion de la fundacion -->
-        <div class="modal fade" id="option" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" >
+        <!-- <div class="modal fade" id="option" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" >
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header text-center">
@@ -66,7 +66,7 @@
                    
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <!-- Cabecero -->
@@ -105,7 +105,13 @@
                           </li>
                           <li class="nav-item">
                               <a class="nav-link active" aria-current="page" href="#main">Home</a>
-                          </li>        
+                          </li> 
+
+                          <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#main">Datos</a>
+                        </li> 
+                          
+                          
         <!--                            
                           <li class="nav-item" v-if="client == ''">
                               <a class="nav-link active" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#login" id="log" >Login</a>
@@ -133,7 +139,7 @@
         <!-- HEADER -->
 
          <!-- Carusel de fotos -->
-         <section id="main">
+         <!-- <section id="main">
             <div id="carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-pause="false">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
@@ -162,7 +168,7 @@
                     </div>
                 </div>
             
-        </section>
+        </section> -->
 
          <!-- Mascotas -->
        <section id="pets" class="mt-4 container" v-if="option == 1">
@@ -221,7 +227,7 @@
 
 
     <!-- Añadir una nueva mascota -->
-<section class="container mt-4"  id="form-pet" v-if="option == 2">
+<!-- <section class="container mt-4"  id="form-pet" v-if="option == 2">
 
     <div class="row mb-3">
         <div class="col text-center text-uppercase">
@@ -318,17 +324,55 @@
 
 
 
-</section>
+</section> -->
 
 
 <!-- pagina del adm -->
-<section class="container mt-4" id="admin" v-if="option == 3 && user.type ==1">
+<section class="container mt-4" id="admin" >
     <div class="row mb-5">
         <div class="col text-center text-uppercase">
             <h1 class="menu-title  mt-3" >ADMINISTRACIÓN</h1>
         </div>
     </div>
-    <div class=" table-responsive">
+
+    <div class="row mb-3 text-center">
+    <div class="col-md-6">
+        <label for="inputState" class="form-label">From:</label>
+        <select id="inputState" class="form-select" v-model="opt1">
+          <option v-for="item in from" v-text="item[0]"></option>
+          
+        </select>
+      </div>
+    
+      <div class="col-md-6">
+        <label for="inputState" class="form-label">To:</label>
+        <select id="inputState" class="form-select" v-model="opt2">
+          <option v-for="item in from" v-text="item[0]"></option>
+          
+        </select>
+      </div>
+    
+    </div>
+
+    <div class="row mb-5 text-center">
+      <div class="col-md-4">
+        <label for="inputEmail4" class="form-label">Valor: </label>
+        <input type="number" class="form-control" id="m1" v-model="money1">
+      </div>
+      <div class="col-md-4 mt-4">
+        <button class="btn btn-success" @click="convert"> Convetir</button>
+      </div>
+      
+      <div class="col-md-4">
+        <label for="inputEmail4" class="form-label">Cantidad: </label>
+        <input type="number" class="form-control" id="m2" v-model.number="money2" disabled>
+      </div>
+      
+      </div>
+
+
+
+    <!-- <div class=" table-responsive">
         <h2 class="mb-3">Mascotas</h2>
     <table class="table table-dark table-hover table-responsive table-striped">
         <thead class="text-center">
@@ -366,7 +410,7 @@
         </tbody>
     </table>
 
-</div>
+</div> -->
 
 <div class=" table-responsive">
     <h2 class=" mb-3">Usuarios</h2>
@@ -381,7 +425,7 @@
                 <th>Ciudad</th>
                 <th>Tipo</th>
                 <th>Mascotas</th>
-                <th>Opciones</th>
+                <th v-if="user.type ==1">Opciones</th>
                 
             </tr>
         </thead>
@@ -397,9 +441,9 @@
                 <td v-else>Usuario</td>
                 <td v-text="item.pets.length"></td>
                 
-                <td >
+                <td v-if="user.type ==1">
                     <button type="button" class="btn btn-danger text-right botones " @click="deleteUser(index)" ><img src="../Images/eliminar.png"  alt=""></button>
-                    <button type="button" class="btn btn-light text-right botones" @click="selectUser(item)" > <img src="../Images/boton-actualizar.png"  alt=""></button>
+                    <button type="button" class="btn btn-light text-right botones" @click="selectUser(item)" data-bs-toggle="modal" data-bs-target="#update"> <img src="../Images/boton-actualizar.png"  alt=""></button>
                 </td>
             </tr>
         </tbody>
@@ -412,7 +456,101 @@
 </section>
 
 
+<!-- Button trigger modal -->
 
+  
+  <!-- Modal -->
+  <div class="modal fade" id="update" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Datos del usuario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row g-3">
+                <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Nombres: </label>
+                    <input type="text" class="form-control" id="6" v-model="user2.name.first">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Apellidos: </label>
+                    <input type="text" class="form-control" id="5" v-model="user2.name.last">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="inputState" class="form-label">Genero:</label>
+                    <select id="inputState" class="form-select" v-mode="user2.gender">
+                      <option selected>Masculino</option>
+                      <option>Femenino</option>
+                      <option>Otro</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Nacionalidad: </label>
+                    <input type="text" class="form-control" id="inputEmail4" v-model="user2.nat">
+                  </div>
+                <div class="col-md-6">
+                  <label for="inputEmail4" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="1" v-model="user2.email">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Usuario: </label>
+                    <input type="text" class="form-control" id="2" v-model="user2.login.username">
+                  </div>
+                  
+                <div class="col-md-6">
+                  <label for="inputPassword4" class="form-label">Contraseña</label>
+                  <input type="password" class="form-control" id="inputPassword4" v-model="user2.login.password">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Celular: </label>
+                    <input type="text" class="form-control" id="3" v-model="user2.cell">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Telefono: </label>
+                    <input type="text" class="form-control" id="4" v-model="user2.phone">
+                  </div>
+                <div class="col-12">
+                  <label for="inputAddress2" class="form-label">Direccion</label>
+                  <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" v-model="user2.location.street.name">
+                </div>
+                <div class="col-md-6">
+                  <label for="inputCity" class="form-label">Ciudad</label>
+                  <input type="text" class="form-control" id="inputCity" v-model="user2.location.city">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputCity" class="form-label">Estado</label>
+                    <input type="text" class="form-control" id="ty" v-model="user2.location.state">
+                  </div>
+                <!-- <div class="col-md-4">
+                  <label for="inputState" class="form-label">Estado</label>
+                  <select id="inputState" class="form-select">
+                    <option selected>Choose...</option>
+                    <option>...</option>
+                  </select>
+                </div> -->
+                <div class="col-md-6">
+                  <label for="inputZip" class="form-label">Codigo Postal</label>
+                  <input type="text" class="form-control" id="inputZip" v-model="user2.location.postcode">
+                </div>
+                <!-- <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="gridCheck">
+                    <label class="form-check-label" for="gridCheck">
+                      Check me out
+                    </label>
+                  </div>
+                </div> -->
+               
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" @click="updateUser">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
    
                                   
