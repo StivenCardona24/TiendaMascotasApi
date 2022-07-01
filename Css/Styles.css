@@ -1,0 +1,35 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    background-image: url("../Images/Fondo.jpg");
+    background-size: contain;
+}
+.abs-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  
+  .form {
+    width: 450px;
+    padding: 25px 40px;
+    /* padding: 10px 30px 70px 30px; */
+/*     
+    width: 50%; */
+    
+    background-color: rgba(240, 176, 176, 0.664);
+    border-radius: 20px;
+    box-shadow: 0px 0px 30px 5px gray;
+  }
+
+
+.form .logo{
+    width: 20%;
+}
+
+
+
